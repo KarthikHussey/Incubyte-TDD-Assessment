@@ -1,6 +1,7 @@
 package com.karthik.assessment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -41,5 +42,12 @@ public class StringCalculatorTest {
 	public void testCustomerDelimeter() {
 		StringCalculator strCalci = new StringCalculator();
 		assertEquals(3, strCalci.add("//;\n1;2"));
+	}
+	
+	@Test
+	public void testNegativeNumbers() {
+		StringCalculator strCalci = new StringCalculator();
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> strCalci.add("1,-1,-2,3"));
+		assertEquals("negatives not allowed: -1,-2", exception.getMessage());
 	}
 }
