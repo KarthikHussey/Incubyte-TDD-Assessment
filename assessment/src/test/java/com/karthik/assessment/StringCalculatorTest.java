@@ -50,4 +50,32 @@ public class StringCalculatorTest {
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> strCalci.add("1,-1,-2,3"));
 		assertEquals("negatives not allowed: -1,-2", exception.getMessage());
 	}
+	
+	@Test
+	public void testGetCalledCount() {
+		StringCalculator strCalci = new StringCalculator();
+		strCalci.add("");
+		strCalci.add("1,2,3");
+		assertEquals(2, strCalci.getCalledCount());
+	}
+	
+	@Test
+	public void testIgnoreBigNumber() {
+		StringCalculator strCalci = new StringCalculator();
+		assertEquals(2, strCalci.add("2,1001"));
+		assertEquals(1002, strCalci.add("2,1000"));
+	}
+	
+	@Test
+	public void testDynamicLengthDelimiter() {
+		StringCalculator strCalci = new StringCalculator();
+		assertEquals(6, strCalci.add("//[***]\n1***2***3"));
+	}
+	
+	@Test
+	public void testMultipleDelimiter() {
+		StringCalculator strCalci = new StringCalculator();
+		assertEquals(6, strCalci.add("//[*][%]\n1*2%3"));
+		assertEquals(6, strCalci.add("//[**][%%]\n1**2%%3"));
+	}
 }

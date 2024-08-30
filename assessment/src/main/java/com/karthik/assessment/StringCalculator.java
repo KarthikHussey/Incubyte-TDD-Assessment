@@ -1,15 +1,26 @@
 package com.karthik.assessment;
 
 public class StringCalculator {
+	
+	private int calledCount = 0;
+	
 	public int add(String numbers) {
+		calledCount++;
 		if (numbers.isEmpty()) {
 			return 0;
 		}
 		String delimiter = ",";
 		if (numbers.startsWith("//")) {
 			int delimiterEndIndex = numbers.indexOf("\n");
-			delimiter = numbers.substring(2, delimiterEndIndex);
+			String delimiterPart = numbers.substring(2, delimiterEndIndex);
 			numbers = numbers.substring(delimiterEndIndex + 1);
+			if (delimiterPart.startsWith("[")) {
+				delimiterPart = delimiterPart.substring(1, delimiterPart.length() - 1);
+				String[] delimiters = delimiterPart.split("\\]\\[");
+				delimiter = String.join("|", delimiters);
+			} else {
+				delimiter = delimiterPart;
+			}
 		}
 		int sum = 0;
 		StringBuilder negatives = new StringBuilder();
@@ -22,7 +33,7 @@ public class StringCalculator {
 			if (numToAdd < 0) {
 				negatives.append(numToAdd);
 				negatives.append(",");
-			} else {
+			} else if (numToAdd <= 1000){
 				sum += numToAdd;
 			}
 		}
@@ -31,5 +42,9 @@ public class StringCalculator {
 			throw new RuntimeException("negatives not allowed: " + negatives.toString());
 		}
 		return sum;
+	}
+
+	public int getCalledCount() {
+		return calledCount;
 	}
 }
